@@ -1,0 +1,23 @@
+{
+	"author": "quinton-ashley",
+	"name": "quintos-games",
+	"description": "QuintOS game project folder",
+	"dependencies": {
+		"java2js": "^1.2.19",
+		"jquery": "^3.6.0",
+		"p5": "^1.4.2",
+		"p5.play": "^3.0.83",
+		"planck": "^1.0.0-alpha.4",
+		"quintos": "^4.0.0"
+	},
+	"license": "GPL-3.0-only",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"v": "npm version patch --force",
+		"V": "npm version minor --force",
+		"version": "git add -A",
+		"postversion": "git push",
+		"relink": "npm link ../../pkg/quintos"
+	},
+	"version": "1.1.11"
+}
