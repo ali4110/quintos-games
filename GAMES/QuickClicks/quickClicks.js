@@ -23,6 +23,9 @@ async function gameOver() {
 	erase();
 	await alert('Game Over!', 12);
 	text(target, targetRow, targetCol);
+	await delay(2000);
+	times = [];
+	start();
 }
 
 function calcStats() {
@@ -70,11 +73,12 @@ function calcStats() {
 function makeTargets() {
 	times.push(Date.now());
 	log(times);
-	if (times.length > 3) {
+	if (times.length > 10) {
 		calcStats();
 		return;
 	}
 	erase();
+	makeBackground();
 	targetRow = round(random(1, 23));
 	targetCol = round(random(1, 71));
 
@@ -91,7 +95,20 @@ function makeTargets() {
 	}
 }
 
+function makeBackground() {
+	let strEven = `_/\\_`.repeat(19);
+	let strOdd = `-\\/-`.repeat(19);
+	for (let i = 1; i < 29; i++) {
+		if (i % 2 == 0) {
+			text(strEven, i);
+		} else {
+			text(strOdd, i);
+		}
+	}
+}
+
 async function start() {
+	makeBackground();
 	await alert('You will have to rapidly click the real targets avoid the imposter targets.', 12);
 	makeTargets();
 }
