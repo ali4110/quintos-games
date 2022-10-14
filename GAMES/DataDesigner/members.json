@@ -1,0 +1,19 @@
+{
+	"members": [
+		{
+			"id": "00001",
+			"name": "Seth Langston",
+			"rented": ["72"]
+		},
+		{
+			"id": "00002",
+			"name": "Arthur Miller",
+			"rented": ["43", "12"]
+		},
+		{
+			"id": "00003",
+			"name": "Taylor Martinez",
+			"rented": ["53", "76", "87"]
+		}
+	]
+}

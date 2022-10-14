@@ -1,0 +1,60 @@
+{
+	"films": [
+		{
+			"id": "12",
+			"title": "It",
+			"genre": 3,
+			"rating": 3,
+			"description": "The story follows the experiences of seven children as they are terrorized by an evil entity that exploits the fears of its victims to disguise itself while hunting its prey."
+		},
+		{
+			"id": "61",
+			"title": "Star Wars I: The Phantom Menace",
+			"genre": 4,
+			"rating": 5,
+			"description": "Jedi Knights Qui-Gon Jinn and Obi-Wan Kenobi set out to stop the Trade Federation from invading Naboo. While travelling, they come across a gifted boy, Anakin, and learn that the Sith have returned."
+		},
+		{
+			"id": "3K",
+			"title": "Dunkirk",
+			"genre": 1,
+			"rating": 4,
+			"description": "During World War II, soldiers from the British Empire, Belgium and France try to evacuate from the town of Dunkirk during a arduous battle with German forces."
+		},
+		{
+			"id": "53",
+			"title": "The Time Traveler's Wife",
+			"genre": 2,
+			"rating": 4,
+			"description": "Henry DeTamble, a librarian, possesses a unique gene that lets him involuntarily travel through time. His wife, Claire Abshire, finds it difficult to cope with it."
+		},
+		{
+			"id": "76",
+			"title": "About Time",
+			"genre": 2,
+			"rating": 5,
+			"description": "Like all the men in his family, Tim Lake possesses the power to travel in time. With the advice of his father, he uses his special ability to pursue his romantic interest, Mary."
+		},
+		{
+			"id": "87",
+			"title": "Back to the Future",
+			"genre": 4,
+			"rating": 5,
+			"description": "Marty travels back in time using an eccentric scientist's time machine. However, he must make his high-school-aged parents fall in love in order to return to the present."
+		},
+		{
+			"id": "43",
+			"title": "Shutter Island",
+			"genre": 3,
+			"rating": 5,
+			"description": "Teddy Daniels and Chuck Aule, two US marshals, are sent to an asylum on a remote island in order to investigate the disappearance of a patient, where Teddy uncovers a shocking truth about the place."
+		},
+		{
+			"id": "72",
+			"title": "Avatar: The Last Airbender Film",
+			"genre": 0,
+			"rating": 1,
+			"description": "The Last Airbender squanders its popular source material with incomprehensible plotting, horrible acting, and detached joyless direction."
+		}
+	]
+}
