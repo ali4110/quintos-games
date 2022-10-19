@@ -1,0 +1,43 @@
+html,
+body {
+	margin: 0;
+}
+
+#buttons {
+	display: flex;
+	flex-flow: row wrap;
+	width: 360px;
+}
+
+button {
+	font-size: 30px;
+	width: 90px;
+	height: 100px;
+	background-color: #828181;
+	color: rgb(255, 255, 255);
+	border-color: #595858;
+	border-style: solid;
+	border-width: 1px;
+}
+
+#large0 {
+	width: 180px;
+}
+
+.operators {
+	background-color: #f1a43c;
+}
+
+.specials {
+	background-color: #696868;
+}
+
+#resultScreen {
+	width: 353px;
+	height: 70px;
+	font-size: 35px;
+	font-family: monospace;
+	margin-top: 25px;
+	margin-bottom: 12px;
+	margin-right: 25px;
+}
