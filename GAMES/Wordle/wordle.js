@@ -65,6 +65,12 @@ async function startGame() {
 			continue;
 		}
 
+		for (let letter of guess) {
+			if (!wordle.includes(letter)) {
+				alphabet = alphabet.replace(letter, ' ');
+			}
+		}
+
 		let rectStyles = checkGuess(guess);
 
 		for (let i = 0; i < guess.length; i++) {
@@ -113,9 +119,6 @@ async function displayScore() {
 	}
 	text(str, 9, 19);
 }
-
-// letter is not in the wordle
-//alphabet = alphabet.replace(guess[i], ' ');
 
 function checkGuess(guess) {
 	let styles = [];
