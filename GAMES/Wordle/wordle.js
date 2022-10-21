@@ -57,11 +57,11 @@ async function startGame() {
 		guess = guess.toUpperCase();
 
 		if (guess.length != 5) {
-			await alert('The word must be five letters long! :)', 5, 18, 20);
+			await alert('The word must be five letters long! :)', 3, 18, 20);
 			guessCount--;
 			continue;
 		} else if (!dictionary.includes(guess)) {
-			await alert('That is not a real word!', 5, 18, 20);
+			await alert('That is not a real word!', 3, 18, 20);
 			guessCount--;
 			continue;
 		}
@@ -120,10 +120,12 @@ async function displayScore() {
 
 function checkGuess(guess) {
 	let styles = [];
+	// loop through each letter in the word
 	for (let i = 0; i < 5; i++) {
-		let count = 0;
 		let letter = guess[i];
-		styles[i] = 'solid';
+
+		styles[i] = 'solid'; // default style until proven otherwise
+
 		if (letter == wordle[i]) {
 			// exact match
 			styles[i] = 'dashed';
@@ -132,6 +134,8 @@ function checkGuess(guess) {
 			let wordleIndexes = getLetterIndexes(letter, wordle);
 			let differences = [];
 
+			// if the letter only occcurs once then do a simple check if the letter
+			// if the letter is included in the word
 			if (guessIndexes.length == 1) {
 				if (wordle.includes(letter)) {
 					styles[i] = 'outline';
@@ -140,13 +144,17 @@ function checkGuess(guess) {
 				log('guessIndexes:' + guessIndexes);
 				log('wordleIndexes:' + wordleIndexes);
 
+				// assume the letter only occurrs in the wordle once
 				let wi = wordleIndexes[0];
+
+				// loop throug the indexes the letter occurs in the guess
+				// find which letter is closest to the letter in the wordle
 				let minDistance = 5;
 				let closestLetterIndex;
 				for (let i = 0; i < guessIndexes.length; i++) {
 					let gi = guessIndexes[i];
 					let dist = Math.abs(gi - wi);
-					if (dist < minDistance) {
+					if (dist != 0 && dist < minDistance) {
 						minDistance = dist;
 						closestLetterIndex = gi;
 					}
