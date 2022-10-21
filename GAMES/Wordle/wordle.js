@@ -40,11 +40,10 @@ function displayBoxes() {
 
 async function startGame() {
 	/* pick new word */
-	// randomPosition = round(random(0, commonWords.length - 1));
-	// wordle = commonWords[randomPosition];
-	// commonWords.splice(randomPosition, 1);
-	// log(commonWords);
-	wordle = 'SEVEN';
+	randomPosition = round(random(0, commonWords.length - 1));
+	wordle = commonWords[randomPosition];
+	commonWords.splice(randomPosition, 1);
+	log(commonWords);
 
 	erase();
 	displayInfo();
