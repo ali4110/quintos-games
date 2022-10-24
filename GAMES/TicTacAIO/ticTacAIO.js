@@ -44,6 +44,10 @@ let turn = 'X';
 let hasAlert = false;
 let xVic = 0;
 let oVic = 0;
+let playerCount = 0;
+let gameCount = 0;
+
+let aiAttack;
 
 let board = [
 	[' ', ' ', ' '],
@@ -51,8 +55,114 @@ let board = [
 	[' ', ' ', ' ']
 ];
 
-let singlePlayer = true;
 let turnCount = 1;
+
+const formations = [
+	// big corners
+	[
+		[0, 0],
+		[0, 2],
+		[2, 2]
+	],
+	[
+		[0, 0],
+		[0, 2],
+		[2, 0]
+	],
+	[
+		[0, 0],
+		[2, 0],
+		[2, 2]
+	],
+	[
+		[0, 2],
+		[2, 2],
+		[2, 0]
+	],
+	// big triangles
+	[
+		[0, 0],
+		[1, 1],
+		[0, 2]
+	],
+	[
+		[0, 0],
+		[1, 1],
+		[2, 0]
+	],
+	[
+		[2, 0],
+		[1, 1],
+		[2, 2]
+	],
+	[
+		[0, 2],
+		[1, 1],
+		[2, 2]
+	],
+	// little Ls
+	[
+		[0, 1],
+		[1, 0],
+		[0, 0]
+	],
+	[
+		[0, 1],
+		[1, 2],
+		[0, 2]
+	],
+	[
+		[1, 0],
+		[2, 1],
+		[2, 0]
+	],
+	[
+		[1, 2],
+		[2, 1],
+		[2, 2]
+	],
+	// bigLs
+	[
+		[0, 0],
+		[1, 2],
+		[0, 2]
+	],
+	[
+		[0, 0],
+		[2, 1],
+		[2, 0]
+	],
+	[
+		[1, 0],
+		[0, 2],
+		[0, 0]
+	],
+	[
+		[2, 1],
+		[0, 2],
+		[2, 2]
+	],
+	[
+		[1, 0],
+		[2, 2],
+		[2, 0]
+	],
+	[
+		[0, 1],
+		[2, 2],
+		[0, 2]
+	],
+	[
+		[0, 1],
+		[2, 0],
+		[0, 0]
+	],
+	[
+		[2, 0],
+		[1, 2],
+		[2, 2]
+	]
+];
 
 function randomTurn() {
 	if (random() > 0.5) {
@@ -79,13 +189,18 @@ async function startGame() {
 	startNewGame();
 }
 
-let mode = 'unbeatable';
+let modeO = 'unbeatable';
+let modeX = 'hard';
 
 async function chooseDifficulty() {
 	await eraseRect(4, 60, 1, 3);
-	button('Easy Difficulty', 4, 58, startGame);
-	button('Medium Difficulty', 6, 58, () => {
+	button('Easy Difficulty', 6, 58, startGame);
+	button('Medium Difficulty', 8, 58, () => {
 		mode = 'medium';
+		startGame();
+	});
+	button('Hard Difficulty', 8, 58, () => {
+		mode = 'hard';
 		startGame();
 	});
 
@@ -103,7 +218,7 @@ function start() {
 
 	// button('Single player game', 4, 58, chooseDifficulty);
 	// button('Two player game', 6, 58, () => {
-	// 	singlePlayer = false;
+	// 	playerCount = 2;
 	// 	startGame();
 	// });
 
@@ -111,43 +226,131 @@ function start() {
 }
 
 /*
- , ,O
- ,X,
+O,O,o
+O, , 
+o, , 
+
+O,o,O
+O, , 
+o, , 
+
+O,o,O
+o, , 
+O, , 
+
+o,X,O
+ , ,
  , ,
 */
 
 function aiTakeTurn() {
-	if (mode == 'unbeatable') {
-		// add other rules to make the ai unbeatable
-		if (turnCount <= 2 && board[1][1] == ' ') {
-			takeTurn(1, 1);
-			return;
-		}
-		if (turnCount == 2 && board[1][1] == 'X') {
-			let row = round(random(0, 1)) * 2;
-			let col = round(random(0, 1)) * 2;
-			takeTurn(row, col);
-			return;
-		}
-	}
+	let mode = modeO;
+	if (turn == 'X') mode = modeX;
+
+	let mark = turn;
+	let opponent = 'X';
+	if (mark == 'X') opponent = 'O';
+
 	if (mode == 'unbeatable' || mode == 'hard' || (mode == 'medium' && random() < 0.75)) {
 		for (let row = 0; row < 3; row++) {
 			for (let col = 0; col < 3; col++) {
 				if (board[row][col] == ' ') {
-					board[row][col] = 'O';
-					if (checkForWinner()) {
+					board[row][col] = mark;
+					if (checkForWinner(mark)) {
 						board[row][col] = ' ';
 						takeTurn(row, col);
 						return;
 					}
-					board[row][col] = 'X';
-					if (checkForWinner('X')) {
+					board[row][col] = opponent;
+					if (checkForWinner(opponent)) {
 						board[row][col] = ' ';
 						takeTurn(row, col);
 						return;
 					}
 					board[row][col] = ' ';
 				}
+			}
+		}
+	}
+
+	if (mode == 'unbeatable') {
+		if (turnCount == 1) {
+			aiAttack = formations[round(random(0, formations.length - 1))];
+		} else if (turnCount == 2) {
+			let oppCoord;
+
+			for (let row = 0; row < 3; row++) {
+				for (let col = 0; col < 3; col++) {
+					if (board[row][col] == 'X') {
+						oppCoord = [row, col];
+						break;
+					}
+				}
+			}
+
+			let _formations = [...formations];
+			for (let i = 0; i < _formations.length; i++) {
+				let formation = _formations[i];
+				for (let j = 0; j < 3; j++) {
+					let coord = formation[j];
+					if (coord[0] == oppCoord[0] && coord[1] == oppCoord[1]) {
+						_formations.splice(i, 1);
+						i--;
+						break;
+					}
+				}
+			}
+			aiAttack = _formations[round(random(0, _formations.length - 1))];
+			log(aiAttack.join('\n'));
+		}
+		// add other rules to make the ai unbeatable
+		if (turnCount <= 2 && board[1][1] == ' ') {
+			takeTurn(1, 1);
+			return;
+		}
+
+		if (turnCount == 2 && board[1][1] == 'X') {
+			let row = round(random(0, 1)) * 2;
+			let col = round(random(0, 1)) * 2;
+			for (let coord of aiAttack) {
+				if (
+					(coord[0] == 0 && coord[1] == 0) ||
+					(coord[0] == 0 && coord[1] == 2) ||
+					(coord[0] == 2 && coord[1] == 0) ||
+					(coord[0] == 2 && coord[1] == 2)
+				) {
+					row = coord[0];
+					col = coord[1];
+					break;
+				}
+			}
+			takeTurn(row, col);
+			return;
+		}
+
+		for (let formation of formations) {
+			let c0 = formation[0];
+			let c1 = formation[1];
+			let c2 = formation[2];
+
+			if (board[c0[0]][c0[1]] == 'X' && board[c1[0]][c1[1]] == 'X' && board[c2[0]][c2[1]] == ' ') {
+				takeTurn(c2[0], c2[1]);
+				return;
+			}
+			if (board[c0[0]][c0[1]] == 'X' && board[c2[0]][c2[1]] == 'X' && board[c1[0]][c1[1]] == ' ') {
+				takeTurn(c1[0], c1[1]);
+				return;
+			}
+			if (board[c1[0]][c1[1]] == 'X' && board[c2[0]][c2[1]] == 'X' && board[c0[0]][c0[1]] == ' ') {
+				takeTurn(c0[0], c0[1]);
+				return;
+			}
+		}
+
+		for (let coord of aiAttack) {
+			if (board[coord[0]][coord[1]] == ' ') {
+				takeTurn(coord[0], coord[1]);
+				return;
 			}
 		}
 	}
@@ -161,26 +364,37 @@ function aiTakeTurn() {
 	takeTurn(row, col);
 }
 
+//
+//
+//
+
 async function takeTurn(row, col) {
 	if (board[row][col] == ' ' && !hasAlert) {
 		if (turn == 'X') {
 			text(bigX, gridRow + row * 8, gridCol + col * 9);
 			board[row][col] = 'X';
-			text("It is O's turn", 2, 60);
+			// text("It is O's turn", 2, 60);
 		} else {
 			board[row][col] = 'O';
 			text(bigO, gridRow + row * 8, gridCol + col * 9);
-			text("It is X's turn", 2, 60);
+			// text("It is X's turn", 2, 60);
 		}
-		turnCount++;
 		log('turnCount: ' + turnCount);
+		log(board.join('\n'));
 
 		if (checkForWinner()) {
 			hasAlert = true;
-			await alert(turn + ' is the winner!', 20, 60, 18);
+			await delay(100);
+			gameCount++;
+
+			if (board[1][1] == 'X') {
+				await alert(turn + ' is the winner!', 20, 60, 18);
+			}
+
 			if (turn == 'X') {
 				xVic++;
 				text('Player X score: ' + xVic, 3, 60);
+				await alert(turn + ' is the winner!', 20, 60, 18);
 				turn = 'O';
 			} else {
 				oVic++;
@@ -193,28 +407,34 @@ async function takeTurn(row, col) {
 
 		if (checkForDraw()) {
 			hasAlert = true;
-			await alert('Draw!', 20, 60, 18);
+			gameCount++;
+			await delay(100);
+			// await alert('Draw!', 20, 60, 18);
 			randomTurn();
 			startNewGame();
 			return;
 		}
 
+		turnCount++;
+		// change turns
 		if (turn == 'X') {
 			turn = 'O';
-			if (singlePlayer) {
+			if (playerCount <= 1) {
 				aiTakeTurn();
 				return;
 			}
 		} else {
 			turn = 'X';
+			if (playerCount == 0) {
+				aiTakeTurn();
+				return;
+			}
 		}
 	} else {
 		hasAlert = true;
 		await alert('The place is occupied!', 20, 60, 18);
 		hasAlert = false;
 	}
-
-	log(board.join('\n'));
 }
 
 function checkForWinner(mark) {
@@ -260,9 +480,12 @@ function startNewGame() {
 	}
 	hasAlert = false;
 
-	text('It is ' + turn + "'s turn", 2, 60);
+	// text('It is ' + turn + "'s turn", 2, 60);
+	if (gameCount >= 1) {
+		text(gameCount + '  ' + round((oVic / gameCount) * 100) + '%', 2, 60);
+	}
 
-	if (singlePlayer && turn == 'O') {
+	if ((playerCount == 1 && turn == 'O') || playerCount == 0) {
 		aiTakeTurn();
 	}
 }
